@@ -20,7 +20,18 @@ module.exports = {
 		      	query: {
 		        	limit: 20000
 		    	}
-		    }	
+		    },
+			{
+		        test: /\.css$/,
+		        use: [
+		          { loader: "style-loader" },
+		          { loader: "css-loader" }
+		        ]
+		    },
+		    {
+			    test: /\.styl$/,
+			    loader: 'css-loader!stylus-loader?paths=node_modules/bootstrap-stylus/stylus/'
+  			}
 		]
 	}
 }

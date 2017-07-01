@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import EntryQueryForm from './EntryQueryForm.jsx'
-import EntryResults from './EntryResults.jsx'
+import EntryList from './EntryList.jsx'
 
 const styles = {
 	headline: {
@@ -18,7 +18,7 @@ class EntrySection extends Component {
 			<div>	
 			 	<h1 style={styles.headline}>Gongo</h1>		 	
 				<EntryQueryForm {...this.props}/>
-				<EntryResults {...this.props}/>
+				<EntryList {...this.props}/>
 			</div>
 		)
 	}
