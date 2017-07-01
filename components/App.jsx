@@ -14,7 +14,6 @@ class App extends Component {
 
 	// Hook method provided by React components that's called ONCE after initial render() completes
 	componentDidMount() {
-		console.log("mouting")
 		let ws = new WebSocket('ws://localhost:4000')
 		let socket = this.socket = new Socket(ws)
 		socket.on('entry add', this.addEntry.bind(this))

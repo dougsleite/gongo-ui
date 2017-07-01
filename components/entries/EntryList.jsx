@@ -10,7 +10,11 @@ class EntryList extends Component {
         {
           this.props.entries.map(e => {
             return(
-              <JSONPretty id="json-pretty" json={e.data}></JSONPretty>
+              <JSONPretty 
+                id="json-pretty" 
+                json={e.data}
+                key={e.id}>
+              </JSONPretty>
             )
           })
         }
