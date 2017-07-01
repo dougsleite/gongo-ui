@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import EntrySection from './entries/EntrySection.jsx'
 import EntryTabs from './entries/EntryTabs.jsx'
+import Socket from '../socket.js'
 
 class App extends Component {
 	
@@ -11,20 +12,13 @@ class App extends Component {
 		}
 	}
 
-	executeQuery(collection, query) {
-		console.log("Collection: " + collection + " - Query: " + query)
-		let {entries} = this.state
-		entries.push({
-			id: entries.length, 
-			data: 
-			'\{\n'+
-				'\"_id\" : ObjectId(\"5564bddfe4b09ed4795e240d\"),\n' +
-				'\"letterId\" : \"6171523b-83c8-4e50-abde-37b9782ea435\",\n' +
-				'\"messageClass\" : \"FasStudentNotificationEvent\",\n' +
-				'\"status\" : \"INVALID_LETTER_CODE\"\n' +
-			'}'
-		})
-		this.setState({entries})
+	// Hook method provided by React components that's called ONCE after initial render() completes
+	componentDidMount() {
+		console.log("mouting")
+		let ws = new WebSocket('ws://localhost:4000')
+		let socket = this.socket = new Socket(ws)
+		socket.on('entry add', this.addEntry.bind(this))
+		socket.on('error', this.error.bind(this))
 	}
 
 	render(){ 
@@ -35,6 +29,31 @@ class App extends Component {
 					executeQuery={this.executeQuery.bind(this)}
 				/>
 			</div>
+		)
+	}	
+
+	addEntry(entry) {		
+		let {entries} = this.state
+		entries.push({
+			id: entries.length, 
+			data: entry
+		})
+		this.setState({entries})
+	}
+
+	error(err) {
+		alert("Error found: " + err);
+	}
+
+	executeQuery(collection, query) {
+		this.setState({entries: []})
+		console.log("emmiting collection=" + collection + ", query=" + query)
+		this.socket.emit(
+			'query execute', 
+			{
+				collection: collection, 
+				query: query
+			}
 		)
 	}
 }
